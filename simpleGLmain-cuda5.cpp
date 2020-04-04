@@ -20,7 +20,7 @@ void keyboard(unsigned char key, int x, int y);
 void mouse(int button, int state, int x, int y);
 void motion(int x, int y);
 
-unsigned int timer = 0; // a timer for FPS calculations
+StopWatchInterface *timer = NULL; // a timer for FPS calculations
 int sleepTime=0, sleepInc=100;
 
 // Main program
@@ -58,7 +58,7 @@ void computeFPS()
 
   if (fpsCount == fpsLimit) {
     char fps[256];
-    float ifps = 1.f / (sdkGetAverageTimerValue(timer) / 1000.f);
+    float ifps = 1.f / (sdkGetAverageTimerValue(&timer) / 1000.f);
     if(sleepTime)
       sprintf(fps, "CUDA Interop (Rob Farber): %3.1f fps sleepTime %3.1f ms ",
 	      ifps, sleepTime/1000.);

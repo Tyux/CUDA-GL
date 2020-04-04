@@ -5,7 +5,7 @@
 #include <cuda_gl_interop.h>
 #include <helper_timer.h>
 #include <helper_cuda.h>
-#include <helper_cuda_gl.h>
+//#include <helper_cuda_gl.h>
 
 extern float animTime;
 
@@ -102,11 +102,12 @@ void initCuda(int argc, char** argv)
   // for CUDA.  NVIDIA notes this is necessary in order to achieve
   // optimal performance with OpenGL/CUDA interop.  use command-line
   // specified CUDA device, otherwise use device with highest Gflops/s
-  if (checkCmdLineFlag(argc, (const char **)argv, "device")) {
-    gpuGLDeviceInit(argc, (const char **)argv);
-  } else {
-    cudaGLSetGLDevice(gpuGetMaxGflopsDeviceId());
-  }
+
+//  if (checkCmdLineFlag(argc, (const char **)argv, "device")) {
+//    gpuGLDeviceInit(argc, (const char **)argv);
+//  } else {
+//    cudaGLSetGLDevice(gpuGetMaxGflopsDeviceId());
+//  }
 
   createVBO(&vertexVBO);
   createVBO(&colorVBO);

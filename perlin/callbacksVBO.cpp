@@ -5,7 +5,7 @@
 #include <cuda_gl_interop.h>
 #include <helper_timer.h>
 #include <helper_cuda.h>
-#include <helper_cuda_gl.h>
+//#include <helper_cuda_gl.h>
 
 // The user must create the following routines:
 void initCuda(int argc, char** argv);
