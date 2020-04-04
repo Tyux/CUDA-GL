@@ -8,7 +8,7 @@
 #include <cuda_gl_interop.h>
 #include <helper_timer.h>
 
-// GLUT specific contants
+// GLUT specific contants //test
 const unsigned int window_width = 512;
 const unsigned int window_height = 512;
 
