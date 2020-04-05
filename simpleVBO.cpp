@@ -5,6 +5,8 @@
 #include <cuda_gl_interop.h>
 #include <helper_timer.h>
 #include <helper_cuda.h>
+//#include "GenVertex.cuh"
+//#include <time.h>
 //#include <helper_cuda_gl.h>
 
 extern float animTime;
@@ -23,7 +25,7 @@ typedef struct {
   struct cudaGraphicsResource *cudaResource;
 } mappedBuffer_t;
 
-extern "C" 
+extern "C"
 void launch_kernel(float4* pos, uchar4* posColor,
 		   unsigned int mesh_width, unsigned int mesh_height, float time);
 
@@ -41,13 +43,13 @@ void createVBO(mappedBuffer_t* mbuf)
   // create buffer object
   glGenBuffers(1, &(mbuf->vbo) );
   glBindBuffer(GL_ARRAY_BUFFER, mbuf->vbo);
-  
+
   // initialize buffer object
   unsigned int size = mesh_width * mesh_height * mbuf->typeSize;
   glBufferData(GL_ARRAY_BUFFER, size, 0, GL_DYNAMIC_DRAW);
-  
+
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-  
+
   cudaGraphicsGLRegisterBuffer( &(mbuf->cudaResource), mbuf->vbo,
 				cudaGraphicsMapFlagsNone );
 }
@@ -59,7 +61,7 @@ void deleteVBO(mappedBuffer_t* mbuf)
 {
   glBindBuffer(1, mbuf->vbo );
   glDeleteBuffers(1, &(mbuf->vbo) );
-  
+
   cudaGraphicsUnregisterResource( mbuf->cudaResource );
   mbuf->cudaResource = NULL;
   mbuf->vbo = (GLuint)NULL;
@@ -83,10 +85,10 @@ void runCuda()
     uint *iptr;
     size_t start;
     cudaGraphicsMapResources( 1, &vertexVBO.cudaResource, NULL );
-    cudaGraphicsResourceGetMappedPointer( ( void ** )&dptr, &start, 
+    cudaGraphicsResourceGetMappedPointer( ( void ** )&dptr, &start,
 					  vertexVBO.cudaResource );
     cudaGraphicsMapResources( 1, &colorVBO.cudaResource, NULL );
-    cudaGraphicsResourceGetMappedPointer( ( void ** )&cptr, &start, 
+    cudaGraphicsResourceGetMappedPointer( ( void ** )&cptr, &start,
 					  colorVBO.cudaResource );
     // execute the kernel
     launch_kernel(dptr, cptr, mesh_width, mesh_height, animTime);
@@ -112,16 +114,16 @@ void initCuda(int argc, char** argv)
   createVBO(&vertexVBO);
   createVBO(&colorVBO);
 
-  // allocate and assign trianglefan indicies 
+  // allocate and assign trianglefan indicies
   qIndexSize = 5*(mesh_height-1)*(mesh_width-1);
   qIndices = (GLuint *) malloc(qIndexSize*sizeof(GLint));
   int index=0;
   for(int i=1; i < mesh_height; i++) {
     for(int j=1; j < mesh_width; j++) {
-      qIndices[index++] = (i)*mesh_width + j; 
-      qIndices[index++] = (i)*mesh_width + j-1; 
-      qIndices[index++] = (i-1)*mesh_width + j-1; 
-      qIndices[index++] = (i-1)*mesh_width + j; 
+      qIndices[index++] = (i)*mesh_width + j;
+      qIndices[index++] = (i)*mesh_width + j-1;
+      qIndices[index++] = (i-1)*mesh_width + j-1;
+      qIndices[index++] = (i-1)*mesh_width + j;
       qIndices[index++] = RestartIndex;
     }
   }
@@ -136,7 +138,7 @@ void renderCuda(int drawMode)
   glBindBuffer(GL_ARRAY_BUFFER, vertexVBO.vbo);
   glVertexPointer(4, GL_FLOAT, 0, 0);
   glEnableClientState(GL_VERTEX_ARRAY);
-  
+
   glBindBuffer(GL_ARRAY_BUFFER, colorVBO.vbo);
   glColorPointer(4, GL_UNSIGNED_BYTE, 0, 0);
   glEnableClientState(GL_COLOR_ARRAY);
@@ -160,4 +162,3 @@ void renderCuda(int drawMode)
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
 }
-
