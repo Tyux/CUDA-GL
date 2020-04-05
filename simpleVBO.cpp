@@ -5,8 +5,6 @@
 #include <cuda_gl_interop.h>
 #include <helper_timer.h>
 #include <helper_cuda.h>
-//#include "GenVertex.cuh"
-//#include <time.h>
 //#include <helper_cuda_gl.h>
 
 extern float animTime;
@@ -105,11 +103,11 @@ void initCuda(int argc, char** argv)
   // optimal performance with OpenGL/CUDA interop.  use command-line
   // specified CUDA device, otherwise use device with highest Gflops/s
 
-//  if (checkCmdLineFlag(argc, (const char **)argv, "device")) {
+  if (checkCmdLineFlag(argc, (const char **)argv, "device")) {
 //    gpuGLDeviceInit(argc, (const char **)argv);
 //  } else {
-//    cudaGLSetGLDevice(gpuGetMaxGflopsDeviceId());
-//  }
+    cudaGLSetGLDevice(gpuGetMaxGflopsDeviceId());
+  }
 
   createVBO(&vertexVBO);
   createVBO(&colorVBO);
